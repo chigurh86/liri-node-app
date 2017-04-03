@@ -52,7 +52,12 @@ function spotifyIt(){
 }
 
 function movieFunction() {
-	var movieNameIn = userInput;
+    if (userInput) {
+       var movieNameIn = userInput; 
+    }else{
+       var movieNameIn = "Mr. Nobody";
+    }
+	
 	var request = require("request");
 	console.log("Hello there")
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieNameIn + "&y=&plot=short&r=json";
@@ -63,7 +68,15 @@ function movieFunction() {
 
   		if (!error && response.statusCode === 200) {
 
-    		console.log("Your Movie: " + JSON.stringify(body));
+    		console.log("Your Movie: " + JSON.parse(body).Title);
+            console.log("Year: " + JSON.parse(body).Year);
+            console.log("Country: " + JSON.parse(body).Country);
+            console.log("Language: " + JSON.parse(body).Language);
+            console.log("Cast: " + JSON.parse(body).Actors);
+            console.log("Plot: " + JSON.parse(body).Plot);
+            console.log("ImdbRating: " + JSON.parse(body).imdbRating);
+            console.log("Source: " + JSON.parse(body).Ratings[1].Source);
+            console.log("Rating: " + JSON.parse(body).Ratings[1].Value);
   		}
 
 			fs.appendFile(logFile, body, function(err) {
@@ -90,20 +103,25 @@ function whatItSays(){
 
 function twitterCall(){
     var client = new Twitter({
-        consumer_key: 'ogDfFvT4Wjw2IR4GicUGBNeqj',
-        consumer_secret: '9FhVPTVg96HyEVZIY5UmHCZpx0nmW4KSy4AWcHxltTLRX5qUug',
-        access_token_key: '785246915478695936-5m1oykjqsGpiOtGSyl9QB2wFC3JVZk5',
-        access_token_secret: '8hGKuwIghWmnUzxeEqErFfy8xG5EfD5S3SASoM0dwqytz'
+        consumer_key: theKeys.twitterKeys.consumer_key,
+        consumer_secret: theKeys.twitterKeys.consumer_secret,
+        access_token_key: theKeys.twitterKeys.access_token_key,
+        access_token_secret: theKeys.twitterKeys.access_token_secret,
     });
 
     var screenName = userInput;
     var params = {screen_name: screenName};
-        console.log(screenName);
         client.get('statuses/user_timeline', params, function(error, tweets, response) 
-            
         {
-            if (!error) {
-                console.log(tweets.text);
+            if (!error && response.statusCode === 200) {
+                // console.log("HERE DA RESPONSE: " + JSON.stringify(tweets[0].created_at));
+                // console.log("HERE DA RESPONSE: " + JSON.stringify(tweets[0].text));
+                for (var i = 0; i < 20; i++) {
+                  console.log("Tweet " + (i + 1) + ":" + JSON.stringify(tweets[i].text));
+                }
+             }
+             else{
+                console.log("You did not make it.")
              }
         });
 	
