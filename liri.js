@@ -77,8 +77,8 @@ function movieFunction() {
             console.log("ImdbRating: " + JSON.parse(body).imdbRating);
             console.log("Source: " + JSON.parse(body).Ratings[1].Source);
             console.log("Rating: " + JSON.parse(body).Ratings[1].Value);
-  		}
 
+  		}
 			fs.appendFile(logFile, body, function(err) {
 
   		if (err) {
